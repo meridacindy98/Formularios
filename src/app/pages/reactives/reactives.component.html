@@ -1,0 +1,94 @@
+<h4>Formularios <small> Reactive </small></h4>
+<hr>
+<form autocomplete="off" [formGroup]="formReactive" (ngSubmit)="save()">
+    <div>
+
+        <div class="form-group row">
+            <label class="col-sm-1 col-form-label" [class.error]="isInvalid('name')">Nombre</label>
+            <div class="col-sm-11">
+                <input class="form-control" type="text" placeholder="Nombre" formControlName="name" [class.is-invalid]="isInvalid('name')">
+                <small *ngIf="isInvalid('name')" class="form-text text-danger">Ingrese al menos 3 letras</small>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-1 col-form-label" [class.error]="isInvalid('lastName')">Apellido</label>
+            <div class="col-sm-11">
+                <input class="form-control" type="text" placeholder="Apellido" formControlName="lastName" [class.is-invalid]="isInvalid('lastName')">
+                <small *ngIf="isInvalid('lastName')" class="form-text text-danger">Ingrese al menos 5 letras</small>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-1 col-form-label" [class.error]="isInvalid('email')">Correo</label>
+        <div class="col-sm-11">
+            <input class="form-control" type="email" placeholder="Correo electrónico" formControlName="email" [class.is-invalid]="isInvalid('email')">
+            <small *ngIf="isInvalid('email')" class="form-text text-danger">Ingrese un correo valido</small>
+        </div>
+    </div>
+
+
+    <div class="form-group row" formGroupName="direction">
+        <label class="col-sm-1" [class.error]="isInvalid('direction')">Direccion</label>
+        <div class="col-sm-5">
+            <input type="text" class="form-control" placeholder="Provincia" formControlName="state" [class.is-invalid]="isInvalid('direction.state')">
+            <small *ngIf="isInvalid('direction.state')" class="form-text text-danger">Provincia es de ingreso obligatorio</small>
+        </div>
+        <div class="col-sm-6">
+            <input type="text" class="form-control" placeholder="Ciudad" formControlName="city" [class.is-invalid]="isInvalid('direction.city')">
+            <small *ngIf="isInvalid('direction.city')" class="form-text text-danger">Ciudad es de ingreso obligatorio</small>
+        </div>
+    </div>
+
+    <br>
+    <h5>Hobbies</h5>
+    <div class="form-group row">
+        <div class="col-sm-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Hobbie</th>
+                        <th scope="col">Borrar</th>
+                        <th scope="col">Modificar</th>
+                    </tr>
+                </thead>
+                <tbody formArrayName="hobbies">
+                    <tr *ngFor="let hobbie of hobbies.controls; let i = index">
+                        <td> {{ i + 1 }} </td>
+                        <td>
+                            <input type="text" class="form-control" [formControlName]="i">
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-outline-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                    <button type="button" class="btn btn-outline-success mt-3"><i class="fa fa-plus mr-sm-2" aria-hidden="true"></i>Agregar hobbie</button>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <hr>
+    <br>
+    <div class="form-group row">
+        <div class="input-group col-sm-12">
+            <button type="submit" class="btn btn-outline-primary btn-block">
+        Guardar
+      </button>
+        </div>
+    </div>
+</form>
+<hr>
+<br>
+<pre>
+    Estado del formulario: {{ formReactive.valid }}
+    <br>
+    Status:  {{ formReactive.status }}
+</pre>
+<pre>
+    {{ formReactive.value | json }}
+</pre>
