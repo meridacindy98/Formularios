@@ -1,60 +1,96 @@
 <h4>Formularios <small> Reactive </small></h4>
 <hr>
 <form autocomplete="off" [formGroup]="formReactive" (ngSubmit)="save()">
-    <div>
 
-        <div class="form-group row">
-            <label class="col-sm-1 col-form-label" [class.error]="isInvalid('name')">Nombre</label>
-            <div class="col-sm-11">
-                <input class="form-control" type="text" placeholder="Nombre" formControlName="name" [class.is-invalid]="isInvalid('name')">
-                <small *ngIf="isInvalid('name')" class="form-text text-danger">Ingrese al menos 3 letras</small>
-            </div>
+    <!-- Nombre -->
+    <div class="form-group row">
+        <label class="col-sm-1 col-form-label">Nombre</label>
+        <div class="col-sm-11">
+            <input class="form-control" type="text" placeholder="Nombre" formControlName="name" [class.is-invalid]="isRequired('name') || noData">
+            <small *ngIf="isRequired('name') || noData" class="form-text text-danger">Este campo es de ingreso obligatorio</small>
+            <small *ngIf="minLength('name') && !isRequired('name')" class="form-text text-danger">Debe ingresar al menos 3 caracteres.</small>
         </div>
+    </div>
 
-        <div class="form-group row">
-            <label class="col-sm-1 col-form-label" [class.error]="isInvalid('lastName')">Apellido</label>
-            <div class="col-sm-11">
-                <input class="form-control" type="text" placeholder="Apellido" formControlName="lastName" [class.is-invalid]="isInvalid('lastName')">
-                <small *ngIf="isInvalid('lastName')" class="form-text text-danger">Ingrese al menos 5 letras</small>
-            </div>
+    <!-- Apellido -->
+    <div class="form-group row">
+        <label class="col-sm-1 col-form-label">Apellido</label>
+        <div class="col-sm-11">
+            <input class="form-control" type="text" placeholder="Apellido" formControlName="lastName" [class.is-invalid]="isRequired('lastName') || noHerrera() || noData">
+            <small *ngIf="isRequired('lastName') || noData" class="form-text text-danger">Este campo es de ingreso obligatorio</small>
+            <small *ngIf="minLength('lastName') && !isRequired('lastName')" class="form-text text-danger">Debe ingresar al menos 3 caracteres.</small>
+            <small *ngIf="noHerrera()" class="form-text text-danger">No puede ingresar el apellido Herrera.</small>
         </div>
+    </div>
 
+    <!-- Correo -->
+    <div class="form-group row">
+        <label class="col-sm-1 col-form-label">Correo</label>
+        <div class="col-sm-11">
+            <input class="form-control" type="email" placeholder="Correo electrónico" formControlName="email" [class.is-invalid]="isRequired('email') || errorEmail() || noData">
+            <small *ngIf="isRequired('email') || noData" class="form-text text-danger">Este campo es de ingreso obligatorio.</small>
+            <small *ngIf="errorEmail()" class="form-text text-danger">Ingrese un email valido.</small>
+        </div>
+    </div>
+
+    <!-- Contraseña -->
+    <div class="form-group row">
+        <label class="col-sm-1 col-form-label">Contraseña</label>
+        <div class="col-sm-11">
+            <input class="form-control" type="text" placeholder="Ingresar una contraseña" formControlName="pass1" [class.is-invalid]="isRequired('pass1') || minLength('pass1') || numberPass || upperCasePass || noEquealsPass || noData">
+            <small *ngIf="isRequired('pass1') || noData" class="form-text text-danger">Este campo es de ingreso obligatorio.</small>
+            <small *ngIf="minLengthPass && !isRequired('pass1')" class="form-text text-danger">Debe ingresar al menos 3 caracteres.</small>
+            <small *ngIf="numberPass && !isRequired('pass1')" class="form-text text-danger">La contraseña debe tener al menos un numero.</small>
+            <small *ngIf="upperCasePass && !isRequired('pass1')" class="form-text text-danger">La contraseña debe tener al menos una letra mayuscula.</small>
+        </div>
     </div>
 
     <div class="form-group row">
-        <label class="col-sm-1 col-form-label" [class.error]="isInvalid('email')">Correo</label>
+        <label class="col-sm-1 col-form-label">Confirmar contraseña</label>
         <div class="col-sm-11">
-            <input class="form-control" type="email" placeholder="Correo electrónico" formControlName="email" [class.is-invalid]="isInvalid('email')">
-            <small *ngIf="isInvalid('email')" class="form-text text-danger">Ingrese un correo valido</small>
+            <input class="form-control mt-sm-2" type="text" placeholder="Ingresar una contraseña" formControlName="pass2" [class.is-invalid]="isRequired('pass2') || noEquealsPass || noData">
+            <small *ngIf="isRequired('pass2') || noData" class="form-text text-danger">Este campo es de ingreso obligatorio.</small>
+            <small *ngIf="noEquealsPass" class="form-text text-danger">Las contraseñas no coinciden</small>
         </div>
     </div>
 
+    <!-- <div class="form-group row">
+        <label class="col-sm-1 col-form-label">Confirmar contraseña</label>
+        <div class="col-sm-11">
+            <input class="form-control mt-sm-2" type="text" placeholder="Reingresar contraseña" formControlName="pass2" [class.is-invalid]="isRequired('pass2')">
+            <small *ngIf="isRequired('pass2')" class="form-text text-danger">Este campo es de ingreso obligatorio</small>
+        </div>
+    </div> -->
 
+
+    <!-- Direccion -->
     <div class="form-group row" formGroupName="direction">
-        <label class="col-sm-1" [class.error]="isInvalid('direction')">Direccion</label>
+        <label class="col-sm-1">Direccion</label>
         <div class="col-sm-5">
-            <input type="text" class="form-control" placeholder="Provincia" formControlName="state" [class.is-invalid]="isInvalid('direction.state')">
-            <small *ngIf="isInvalid('direction.state')" class="form-text text-danger">Provincia es de ingreso obligatorio</small>
+            <input type="text" class="form-control" placeholder="Provincia" formControlName="state" [class.is-invalid]="isRequired('direction.state') || noData">
+            <small *ngIf="isRequired('direction.state') || noData" class="form-text text-danger">Este campo es de ingreso obligatorio.</small>
+            <small *ngIf="minLength('direction.state') && !isRequired('direction.state')" class="form-text text-danger">Debe ingresar al menos 3 caracteres.</small>
         </div>
         <div class="col-sm-6">
-            <input type="text" class="form-control" placeholder="Ciudad" formControlName="city" [class.is-invalid]="isInvalid('direction.city')">
-            <small *ngIf="isInvalid('direction.city')" class="form-text text-danger">Ciudad es de ingreso obligatorio</small>
+            <input type="text" class="form-control" placeholder="Ciudad" formControlName="city" [class.is-invalid]="isRequired('direction.city') || noData">
+            <small *ngIf="isRequired('direction.city') || noData" class="form-text text-danger">Este campo es de ingreso obligatorio.</small>
+            <small *ngIf="minLength('direction.city') && !isRequired('direction.city')" class="form-text text-danger">Debe ingresar al menos 3 caracteres.</small>
         </div>
     </div>
 
     <br>
+    <!-- Hobbies -->
     <h5>Hobbies</h5>
     <div class="form-group row">
         <div class="col-sm-12">
             <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">Id</th>
-                        <th scope="col">Hobbie</th>
-                        <th scope="col">Borrar</th>
-                        <th scope="col">Modificar</th>
+                <!-- <thead>
+                      <tr>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
                     </tr>
-                </thead>
+                </thead> -->
                 <tbody formArrayName="hobbies">
                     <tr *ngFor="let hobbie of hobbies.controls; let i = index">
                         <td> {{ i + 1 }} </td>
@@ -62,18 +98,15 @@
                             <input type="text" class="form-control" [formControlName]="i">
                         </td>
                         <td>
-                            <button type="button" class="btn btn-outline-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
-                        </td>
-                        <td>
+                            <button (click)="deleteHobbie(i)" type="button" class="btn btn-outline-danger"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                         </td>
                     </tr>
-                    <button type="button" class="btn btn-outline-success mt-3"><i class="fa fa-plus mr-sm-2" aria-hidden="true"></i>Agregar hobbie</button>
                 </tbody>
             </table>
+            <button (click)="createhobbie()" type="button" class="btn btn-outline-success"><i class="fa fa-plus mr-sm-2" aria-hidden="true"></i>Agregar hobbie</button>
         </div>
     </div>
     <hr>
-    <br>
     <div class="form-group row">
         <div class="input-group col-sm-12">
             <button type="submit" class="btn btn-outline-primary btn-block">
