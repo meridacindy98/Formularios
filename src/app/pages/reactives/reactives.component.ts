@@ -20,6 +20,7 @@ export class ReactivesComponent implements OnInit {
   constructor( private formBuilder: FormBuilder, private validators: ValidatorsService ) {
     this.createForm();
     this.loadForm();
+    this.createListener();
   }
 
   ngOnInit(): void {
@@ -30,6 +31,7 @@ export class ReactivesComponent implements OnInit {
       name: [ '', [Validators.required, Validators.minLength(3)] ],
       lastName: [ '', [Validators.required, Validators.minLength(3), this.validators.noHerrera] ],
       email: ['', [Validators.required, Validators.pattern('[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$')] ],
+      user: [ '', , this.validators.userExists ],
       pass1: [ '', [Validators.required, Validators.minLength(3), this.validators.numberPass, this.validators.upperCasePass] ],
       pass2: [ '', [Validators.required, Validators.minLength(3)] ],
       direction: this.formBuilder.group({
@@ -40,8 +42,11 @@ export class ReactivesComponent implements OnInit {
     }, { // validacion a nivel formulario
       validators: this.validators.equealPass('pass1', 'pass2')
     });
+
+    console.log(this.formReactive);
   }
 
+  // Carga el formulario con datos
   loadForm() {
     // seteando valores con setValue
     /* this.formReactive.setValue({
@@ -55,19 +60,33 @@ export class ReactivesComponent implements OnInit {
     }); */
 
     // seteando valores con reset
-   /*  this.formReactive.reset({
-      name: '',
-      lastName: '',
-      email: '',
-      pass1: '',
-      pass2: '',
+    this.formReactive.reset({
+      name: 'Cindy',
+      lastName: 'Rojas',
+      email: 'meridacindy98@yahoo.com.ar',
+      pass1: 'Tumami1123',
+      pass2: 'Tumami1123',
       direction: {
-        state: '',
-        city: ''
+        state: 'Buenos Aires',
+        city: 'Ciudadela'
       }
     });
 
-    ['Jugar', 'Dormir'].forEach( hobbie => this.hobbies.push( this.formBuilder.control(hobbie) ) ); */
+    ['Jugar', 'Dormir'].forEach( hobbie => this.hobbies.push( this.formBuilder.control(hobbie) ) );
+  }
+
+  createListener() {
+/*     this.formReactive.valueChanges.subscribe( valor => {
+      console.log(valor);
+    } );
+
+    this.formReactive.statusChanges.subscribe( valor => {
+      console.log(valor);
+    } ); */
+
+    this.formReactive.get('name').valueChanges.subscribe( console.log );
+    this.formReactive.get('name').statusChanges.subscribe( console.log );
+
   }
 
   createhobbie() {
@@ -131,6 +150,11 @@ export class ReactivesComponent implements OnInit {
   errorEmail() {
     return this.formReactive.get('email').hasError('pattern') && this.formReactive.get('email').touched;
   }
+
+  userNoValid() {
+    return this.formReactive.get('user').hasError('userExists') && this.formReactive.get('user').touched;
+  }
+
   // getter
   get hobbies() {
     return this.formReactive.get('hobbies') as FormArray;

@@ -6,7 +6,7 @@
     <div class="form-group row">
         <label class="col-sm-1 col-form-label">Nombre</label>
         <div class="col-sm-11">
-            <input class="form-control" type="text" placeholder="Nombre" formControlName="name" [class.is-invalid]="isRequired('name') || noData">
+            <input class="form-control" type="text" placeholder="Nombre" formControlName="name" [class.is-invalid]="isRequired('name') || minLength('name') || noData">
             <small *ngIf="isRequired('name') || noData" class="form-text text-danger">Este campo es de ingreso obligatorio</small>
             <small *ngIf="minLength('name') && !isRequired('name')" class="form-text text-danger">Debe ingresar al menos 3 caracteres.</small>
         </div>
@@ -16,7 +16,7 @@
     <div class="form-group row">
         <label class="col-sm-1 col-form-label">Apellido</label>
         <div class="col-sm-11">
-            <input class="form-control" type="text" placeholder="Apellido" formControlName="lastName" [class.is-invalid]="isRequired('lastName') || noHerrera() || noData">
+            <input class="form-control" type="text" placeholder="Apellido" formControlName="lastName" [class.is-invalid]="isRequired('lastName') || minLength('lastName') || noHerrera() || noData">
             <small *ngIf="isRequired('lastName') || noData" class="form-text text-danger">Este campo es de ingreso obligatorio</small>
             <small *ngIf="minLength('lastName') && !isRequired('lastName')" class="form-text text-danger">Debe ingresar al menos 3 caracteres.</small>
             <small *ngIf="noHerrera()" class="form-text text-danger">No puede ingresar el apellido Herrera.</small>
@@ -27,9 +27,19 @@
     <div class="form-group row">
         <label class="col-sm-1 col-form-label">Correo</label>
         <div class="col-sm-11">
-            <input class="form-control" type="email" placeholder="Correo electrónico" formControlName="email" [class.is-invalid]="isRequired('email') || errorEmail() || noData">
+            <input class="form-control" type="email" placeholder="Correo electrónico" formControlName="email" [class.is-invalid]="isRequired('email') || minLength('email') || errorEmail() || noData">
             <small *ngIf="isRequired('email') || noData" class="form-text text-danger">Este campo es de ingreso obligatorio.</small>
             <small *ngIf="errorEmail()" class="form-text text-danger">Ingrese un email valido.</small>
+        </div>
+    </div>
+
+    <!-- Usuario -->
+    <div class="form-group row">
+        <label class="col-sm-1 col-form-label">Usuario</label>
+        <div class="col-sm-11">
+            <input class="form-control" type="text" placeholder="nombre de usuario" formControlName="user">
+            <small *ngIf="isRequired('user') || noData" class="form-text text-danger">Este campo es de ingreso obligatorio.</small>
+            <small *ngIf="userNoValid()" class="form-text text-danger">Ese nombre de usuario ya fue tomado.</small>
         </div>
     </div>
 
@@ -37,7 +47,7 @@
     <div class="form-group row">
         <label class="col-sm-1 col-form-label">Contraseña</label>
         <div class="col-sm-11">
-            <input class="form-control" type="text" placeholder="Ingresar una contraseña" formControlName="pass1" [class.is-invalid]="isRequired('pass1') || minLength('pass1') || numberPass || upperCasePass || noEquealsPass || noData">
+            <input class="form-control" type="text" placeholder="Ingresar una contraseña" formControlName="pass1" [class.is-invalid]="isRequired('pass1') || minLengthPass || numberPass || upperCasePass || noEquealsPass || noData">
             <small *ngIf="isRequired('pass1') || noData" class="form-text text-danger">Este campo es de ingreso obligatorio.</small>
             <small *ngIf="minLengthPass && !isRequired('pass1')" class="form-text text-danger">Debe ingresar al menos 3 caracteres.</small>
             <small *ngIf="numberPass && !isRequired('pass1')" class="form-text text-danger">La contraseña debe tener al menos un numero.</small>
@@ -53,15 +63,6 @@
             <small *ngIf="noEquealsPass" class="form-text text-danger">Las contraseñas no coinciden</small>
         </div>
     </div>
-
-    <!-- <div class="form-group row">
-        <label class="col-sm-1 col-form-label">Confirmar contraseña</label>
-        <div class="col-sm-11">
-            <input class="form-control mt-sm-2" type="text" placeholder="Reingresar contraseña" formControlName="pass2" [class.is-invalid]="isRequired('pass2')">
-            <small *ngIf="isRequired('pass2')" class="form-text text-danger">Este campo es de ingreso obligatorio</small>
-        </div>
-    </div> -->
-
 
     <!-- Direccion -->
     <div class="form-group row" formGroupName="direction">
